@@ -6,6 +6,17 @@
 //   ボット名 del      - TODO を消す
 //   ボット名 list     - TODO の一覧表示
 //   ボット名 donelist - 完了した TODO の一覧表示
+
+/**
+ * 
+ * 実装した、bot-todo の list コマンドと donelist コマンドは、 それぞれの一覧が空であるときはエラーになってしまいます。
+ * そこで、list、donelist が空であるときは、それぞれ
+
+（TODO はありません）
+（完了した TODO はありません）
+とボットが発言するように修正してみましょう。
+ */
+
 'use strict';
 const bolt = require('@slack/bolt');
 const dotenv = require('dotenv');
@@ -38,11 +49,23 @@ app.message(/del (.+)/i, ({context, say}) => {
 });
 
 app.message(/^list/i, ({context, say}) => {
-  say(todo.list().join('\n'));
+  //say(todo.list().join('\n'));
+  const list = todo.list();
+  if(list.length === 0) {
+    say('(TODOはありません)');
+  } else {
+    say(list.join('\n'));
+  }
 });
 
 app.message(/donelist/i, ({context, say}) => {
-  say(todo.donelist().join('\n'));
+  //say(todo.donelist().join('\n'));
+  const donelist = todo.donelist();
+  if(donelist.length === 0) {
+    say('(完了したTODOはありません)');
+  } else {
+    say(donelist.join('\n'));
+  }
 });
 
 app.start();
